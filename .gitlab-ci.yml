@@ -11,8 +11,7 @@ deploy-development:
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:development" .
     - docker push "$CI_REGISTRY_IMAGE:development"
-  rules:
-    - when: manual
+  when: manual
   only:
     - develop
 
@@ -26,7 +25,6 @@ deploy-production:
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:latest" .
     - docker push "$CI_REGISTRY_IMAGE:latest"
-  rules:
-    - when: manual
+  when: manual
   only:
     - master

@@ -66,7 +66,7 @@ while NEXT_SLEEP=$(( $NEXT_SLEEP > $MAX_SLEEP ? $MAX_SLEEP : $NEXT_SLEEP ));
     CURRENT_VERSION_CHECKSUM="$(sha256sum "$ZSCANNER_JAR_DIR/zscanner.jar" | cut -c 1-64)"
 
     EXITCODE=0
-    java -jar "$ZSCANNER_JAR_DIR/zscanner.jar" "-Dzscanner.update.enabled=true" "-Dzscanner.update.jar-url=$ZSCANNER_JAR_URL" "-Dzscanner.update.jar-sha256=$CURRENT_VERSION_CHECKSUM" "$@" || EXITCODE=$?
+    java "-Dzscanner.update.enabled=true" "-Dzscanner.update.jar-url=$ZSCANNER_JAR_URL" "-Dzscanner.update.jar-sha256=$CURRENT_VERSION_CHECKSUM" $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_DIR/zscanner.jar" "$@" || EXITCODE=$?
 
     case "$EXITCODE" in
         210) continue            # update detected

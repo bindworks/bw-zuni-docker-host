@@ -44,7 +44,7 @@ while NEXT_SLEEP=$(( $NEXT_SLEEP > $MAX_SLEEP ? $MAX_SLEEP : $NEXT_SLEEP ));
             echo "New version downloaded, verifying..." >&2
             ls -l "$ZSCANNER_JAR_DIR/zscanner-new.jar"
             echo "Checksum: $NEW_VERSION_CHECKSUM"
-            if jarsigner -verify -keystore signing-ca.keystore -storetype pkcs12 -storepass password "$ZSCANNER_JAR_DIR/zscanner-new.jar" -strict; then
+            if jarsigner -verify -keystore signing-ca.keystore -storetype pkcs12 -storepass password "$ZSCANNER_JAR_DIR/zscanner-new.jar"; then
                 echo "New version downloaded, installing..." >&2
                 mv -f "$ZSCANNER_JAR_DIR/zscanner-new.jar" "$ZSCANNER_JAR_DIR/zscanner.jar"
                 echo "New version installed." >&2

@@ -9,6 +9,10 @@ if ! [ -d "$ZSCANNER_JAR_DIR" ]; then
     mkdir -p "$ZSCANNER_JAR_DIR"
 fi
 
+if [ -z "$ZSCANNER_JAR_UPDATE_ENABLED" ]; then
+    ZSCANNER_JAR_UPDATE_ENABLED=true
+fi
+
 MAX_SLEEP=60
 NEXT_SLEEP=1
 
@@ -66,7 +70,7 @@ while NEXT_SLEEP=$(( $NEXT_SLEEP > $MAX_SLEEP ? $MAX_SLEEP : $NEXT_SLEEP ));
     CURRENT_VERSION_CHECKSUM="$(sha256sum "$ZSCANNER_JAR_DIR/zscanner.jar" | cut -c 1-64)"
 
     EXITCODE=0
-    java "-Dzscanner.update.enabled=true" "-Dzscanner.update.jar-url=$ZSCANNER_JAR_URL" "-Dzscanner.update.jar-sha256=$CURRENT_VERSION_CHECKSUM" $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_DIR/zscanner.jar" "$@" || EXITCODE=$?
+    java "-Dzscanner.update.enabled=$ZSCANNER_JAR_UPDATE_ENABLED" "-Dzscanner.update.jar-url=$ZSCANNER_JAR_URL" "-Dzscanner.update.jar-sha256=$CURRENT_VERSION_CHECKSUM" $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_DIR/zscanner.jar" "$@" || EXITCODE=$?
 
     case "$EXITCODE" in
         210) continue            # update detected

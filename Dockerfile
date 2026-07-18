@@ -5,6 +5,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-ces \
     tesseract-ocr-lat \
+    unrar \
     unzip \
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /usr/local/lib

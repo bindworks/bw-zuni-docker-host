@@ -5,6 +5,12 @@ set -e
 ## expect: ZSCANNER_JAR_URL
 ## expect: ZSCANNER_JAR_DIR
 
+# ZSCANNER_JAR_PATH: run a fixed, local jar as-is - no download, no update, no -D arguments
+if [ -n "$ZSCANNER_JAR_PATH" ]; then
+    echo "Running local jar $ZSCANNER_JAR_PATH (updates disabled)." >&2
+    exec java $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_PATH" "$@"
+fi
+
 if ! [ -d "$ZSCANNER_JAR_DIR" ]; then
     mkdir -p "$ZSCANNER_JAR_DIR"
 fi

@@ -5,14 +5,10 @@ set -e
 ## expect: ZSCANNER_JAR_URL
 ## expect: ZSCANNER_JAR_DIR
 
-# java4shell (CVE-2026-114938): disable the vulnerable Base64 intrinsic.
-# Drop this once the base image is on Temurin 21.0.13.1+2 or newer.
-JAVA_SECURITY_ARGS="-XX:-UseBASE64Intrinsics"
-
 # ZSCANNER_JAR_PATH: run a fixed, local jar as-is - no download, no update, no -D arguments
 if [ -n "$ZSCANNER_JAR_PATH" ]; then
     echo "Running local jar $ZSCANNER_JAR_PATH (updates disabled)." >&2
-    exec java $JAVA_SECURITY_ARGS $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_PATH" "$@"
+    exec java $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_PATH" "$@"
 fi
 
 if ! [ -d "$ZSCANNER_JAR_DIR" ]; then
@@ -80,7 +76,7 @@ while NEXT_SLEEP=$(( $NEXT_SLEEP > $MAX_SLEEP ? $MAX_SLEEP : $NEXT_SLEEP ));
     CURRENT_VERSION_CHECKSUM="$(sha256sum "$ZSCANNER_JAR_DIR/zscanner.jar" | cut -c 1-64)"
 
     EXITCODE=0
-    java "-Dzscanner.update.enabled=$ZSCANNER_JAR_UPDATE_ENABLED" "-Dzscanner.update.jar-url=$ZSCANNER_JAR_URL" "-Dzscanner.update.jar-sha256=$CURRENT_VERSION_CHECKSUM" $JAVA_SECURITY_ARGS $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_DIR/zscanner.jar" "$@" || EXITCODE=$?
+    java "-Dzscanner.update.enabled=$ZSCANNER_JAR_UPDATE_ENABLED" "-Dzscanner.update.jar-url=$ZSCANNER_JAR_URL" "-Dzscanner.update.jar-sha256=$CURRENT_VERSION_CHECKSUM" $JAVA_EXTRA_ARGS -jar "$ZSCANNER_JAR_DIR/zscanner.jar" "$@" || EXITCODE=$?
 
     case "$EXITCODE" in
         210) continue            # update detected
